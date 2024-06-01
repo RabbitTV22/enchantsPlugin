@@ -1,0 +1,8 @@
+name: BuyBooks
+version: '${version}'
+main: net.rabbitnetwork.buybooks.BuyBooks
+api-version: '1.20'
+commands:
+  buy:
+    usage: /<command>
+    description: Buy enchanted books!
