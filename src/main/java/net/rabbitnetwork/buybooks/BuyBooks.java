@@ -1,6 +1,5 @@
 package net.rabbitnetwork.buybooks;
 
-import io.papermc.paper.event.player.AsyncChatCommandDecorateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,9 +23,10 @@ public class BuyBooks extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(this, this); //register plugin
+        System.out.println("Buy Books Plugin is Enabled"); //send message in console that the plugin is working fine
     }
-
+//set up all the arrays for the lore(price) text
     List<String> one = new ArrayList<>();
     List<String> two = new ArrayList<>();
     List<String> three = new ArrayList<>();
@@ -47,8 +47,6 @@ public class BuyBooks extends JavaPlugin implements Listener {
     List<String> eighteen = new ArrayList<>();
     List<String> nineteen = new ArrayList<>();
     List<String> twenty = new ArrayList<>();
-
-    //skipped 21 cuz i cant count 😭😭😭😭
     List<String> not21 = new ArrayList<>();
     List<String> twentytwo = new ArrayList<>();
     List<String> twentythree = new ArrayList<>();
@@ -71,15 +69,17 @@ public class BuyBooks extends JavaPlugin implements Listener {
 
 
 
-    @EventHandler
+    @EventHandler //the /buy command listener
     public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (event.getMessage().startsWith("/buy")) {
+        if (event.getMessage().startsWith("/buy")) { //if the command that the player types is /buy
             event.setCancelled(true);
-            openGUI(event.getPlayer());
+            openGUI(event.getPlayer()); //call the open GUI class  and get the player
         }
     }
-
+//
     private void openGUI(Player player) {
+        //reset all the lore text every time a player opens the GUI.
+        //Not removing the lore caused the text to stack indefinetly
         one.clear();
         two.clear();
         three.clear();
@@ -117,18 +117,18 @@ public class BuyBooks extends JavaPlugin implements Listener {
         thirtyfive.clear();
         thirtysix.clear();
         thirtyseven.clear();
-        Inventory gui = Bukkit.createInventory(null, 45, "Buy Menu");
+        Inventory gui = Bukkit.createInventory(null, 45, "Buy Menu"); //create the custom GUI with 45 slots and the name of "Buy Menu"
 
 
         //  Aqua affinity
-        ItemStack aquaAfinity = new ItemStack(Material.ENCHANTED_BOOK);
+        ItemStack aquaAfinity = new ItemStack(Material.ENCHANTED_BOOK); //set up an enchanted book
         EnchantmentStorageMeta aquaAfinityItemMeta = (EnchantmentStorageMeta) aquaAfinity.getItemMeta();
-        aquaAfinityItemMeta.addStoredEnchant(Enchantment.WATER_WORKER, 1, true);
-        one.add(ChatColor.GREEN + "Price:");
+        aquaAfinityItemMeta.addStoredEnchant(Enchantment.WATER_WORKER, 1, true); //give the correct enchantment to the book
+        one.add(ChatColor.GREEN + "Price:"); //set the bottom text for the price
         one.add(ChatColor.BLUE + "30 Emeralds and 3 Levels of XP");
-        aquaAfinityItemMeta.setLore(one);
+        aquaAfinityItemMeta.setLore(one); //put the lore under the item
         aquaAfinity.setItemMeta(aquaAfinityItemMeta);
-        gui.setItem(0, aquaAfinity);
+        gui.setItem(0, aquaAfinity); //put that item in the slot number 0
 
         // Bane of Arthropods
         ItemStack arthopods = new ItemStack(Material.ENCHANTED_BOOK);
@@ -170,12 +170,12 @@ public class BuyBooks extends JavaPlugin implements Listener {
         deptStrider.setItemMeta(deptStriderItemMeta);
         gui.setItem(4, deptStrider);
 
-        // Efficency
+        // Efficiency
         ItemStack efficency = new ItemStack(Material.ENCHANTED_BOOK);
         EnchantmentStorageMeta efficencyItemMeta = (EnchantmentStorageMeta) efficency.getItemMeta();
         efficencyItemMeta.addStoredEnchant(Enchantment.DIG_SPEED, 5, true);
         six.add(ChatColor.GREEN + "Price:");
-        six.add(ChatColor.BLUE + "40 Emeralds and 3 Levels of XP");
+        six.add(ChatColor.BLUE + "30 Emeralds and 3 Levels of XP");
         efficencyItemMeta.setLore(six);
         efficency.setItemMeta(efficencyItemMeta);
         gui.setItem(5, efficency);
@@ -492,10 +492,10 @@ public class BuyBooks extends JavaPlugin implements Listener {
         gui.setItem(36, unbreaking);
 
 
-        player.openInventory(gui);
+        player.openInventory(gui); //open the GUI after all items are set
     }
 
-
+//remove the price text after buying an item
     private ItemStack removeLore(ItemStack item) {
         ItemStack newItem = new ItemStack(item);
         ItemMeta meta = newItem.getItemMeta();
@@ -506,16 +506,16 @@ public class BuyBooks extends JavaPlugin implements Listener {
         return newItem;
     }
 
-    @EventHandler
+    @EventHandler //Inventory click event for when someone clicks on a slot in the GUI
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory gui = event.getInventory();
-        if (gui.getSize() == 45) {
+        if (gui.getSize() == 45) { //if the size is 45 aka the custom GUI that got created
             event.setCancelled(true);
-            Player player = (Player) event.getWhoClicked();
-            int slot = event.getSlot();
+            Player player = (Player) event.getWhoClicked(); //get the player that clicked in the GUI
+            int slot = event.getSlot(); //also get the slot number
 
-            if (slot == 0 && gui.getItem(0) != null) {
-                processTransaction(player, gui.getItem(0), 30, 3, "Aqua Affinity");
+            if (slot == 0 && gui.getItem(0) != null) { //if the slot that was clicked is 0 and has an item in it
+                processTransaction(player, gui.getItem(0), 30, 3, "Aqua Affinity"); //call the process transaction class and set the price to 30 Emeralds and set the book name
             } else if (slot == 1 && gui.getItem(1) != null) {
                 processTransaction(player, gui.getItem(1), 25, 3, "Bane of Arthropods");
             } else if (slot == 2 && gui.getItem(2) != null) {
@@ -525,7 +525,7 @@ public class BuyBooks extends JavaPlugin implements Listener {
             } else if (slot == 4 && gui.getItem(4) != null) {
                 processTransaction(player, gui.getItem(4), 30, 3, "Depth Strider");
             } else if (slot == 5 && gui.getItem(5) != null) {
-                processTransaction(player, gui.getItem(5), 40, 3, "Efficiency");
+                processTransaction(player, gui.getItem(5), 30, 3, "Efficiency");
             } else if (slot == 6 && gui.getItem(6) != null) {
                 processTransaction(player, gui.getItem(6), 30, 3, "Feather Falling");
             } else if (slot == 7 && gui.getItem(7) != null) {
@@ -591,19 +591,19 @@ public class BuyBooks extends JavaPlugin implements Listener {
             }
         }
     }
-
+//process transaction class
     private void processTransaction(@NotNull Player player, ItemStack item, int emeraldsCost, int xpCost, String bookName) {
-        if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), emeraldsCost)) {
-            if (player.getLevel() >= xpCost) {
-                player.getInventory().removeItem(new ItemStack(Material.EMERALD, emeraldsCost));
-                player.getInventory().addItem(removeLore(item));
-                player.setLevel(player.getLevel() - xpCost);
-                player.sendMessage("You bought a " + bookName + " book for " + emeraldsCost + " emeralds and " + xpCost + " levels of XP!");
+        if (player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), emeraldsCost)) { //if the player has enough emeralds
+            if (player.getLevel() >= xpCost) { //check if the player also has enough XP
+                player.getInventory().removeItem(new ItemStack(Material.EMERALD, emeraldsCost)); //remove the right amount of emeralds from the players inventory
+                player.getInventory().addItem(removeLore(item)); //Remove the lore of the item that is purchased
+                player.setLevel(player.getLevel() - xpCost); //remove the XP of the player
+                player.sendMessage("You bought a " + bookName + " book for " + emeraldsCost + " emeralds and " + xpCost + " levels of XP!"); //send a receipt message to the player
             } else {
-                player.sendMessage("You don't have enough experience levels!");
+                player.sendMessage("You don't have enough experience levels!"); //if player has enough emeralds but not enough XP send this message
             }
         } else {
-            player.sendMessage("You don't have enough emeralds!");
+            player.sendMessage("You don't have enough emeralds!"); //if player has not enough emeralds send this message
         }
     }
 }
