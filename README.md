@@ -14,7 +14,7 @@ If you would like to edit prices of the book you can not do it in the config fil
   
    ![image](https://github.com/RabbitTV22/enchantsPlugin/assets/154371299/8d87597d-4b2f-405a-8396-015e45660f8c)
 
-3. Find the book you want to edit. I will be using Efficency as an example.
+3. Find the book you want to edit. I will be using Efficiency as an example (yes I know I made a spelling mistake).
   
    ![image](https://github.com/RabbitTV22/enchantsPlugin/assets/154371299/f25f4ece-46f1-46db-929d-4ad49b2d3d54)
 
